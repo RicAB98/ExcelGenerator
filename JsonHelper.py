@@ -30,7 +30,7 @@ class JsonHelper:
         return dictionary
 
     def ParseJson(file):
-        f = open('FicheirosGerados/Grelha.json')
+        f = open(file)
         data = json.load(f)
 
         dictionary = {

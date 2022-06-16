@@ -1,6 +1,5 @@
 import sys
-from webbrowser import BackgroundBrowser
-from PyQt6.QtWidgets import QApplication, QColorDialog, QMainWindow
+from PyQt6.QtWidgets import QApplication, QColorDialog, QMainWindow, QFileDialog
 from PyQt6 import uic
 from Section import Section
 from Generator import Generator
@@ -35,7 +34,9 @@ class UI(QMainWindow):
         self.gerarButton.clicked.connect(self.Generate)
 
     def UploadFile(self):
-        dictionary = JsonHelper.ParseJson("tmp")
+        fname = QFileDialog.getOpenFileName(self, 'Abrir ficheiro', './',"Ficheiro json (*.json)")
+
+        dictionary = JsonHelper.ParseJson(fname[0])
 
         self.ficheiroTextBox.setText(dictionary["fileName"])
         self.alunosSpinBox.setValue(dictionary["numberStudents"])
@@ -46,7 +47,6 @@ class UI(QMainWindow):
 
         self.finalSection = dictionary["finalSection"][0]
         self.UpdateColorFrames(self.cabecalhoAvaliacaoFrame, self.textoAvaliacaoFrame, self.finalSection)
-        print(self.finalSection.__dict__)
 
     def UpdateColorFrames(self, backgroundFrame, textFrame, section):
         style = f"background-color:rgb({section.headerColor[0]}, {section.headerColor[1]}, {section.headerColor[2]}); "
@@ -118,7 +118,6 @@ class UI(QMainWindow):
     def ComboBoxChanged(self, index):
         section = self.sections[index]
         self.changingComboBox = True
-        print(section.__dict__)
 
         self.nomeTextBox.setText(section.name)
         self.subseccoesSpinBox.setValue(section.subSections)
