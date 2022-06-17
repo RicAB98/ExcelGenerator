@@ -39,7 +39,7 @@ class UI(QMainWindow):
         try:
             isSuccess, result = JsonHelper.ParseJson(fname[0])
         except:
-            self.infoLabel.setText("Erro encontrado no ficheiro JSON")
+            self.infoLabel.setText("Erro encontrado no ficheiro carregado")
             return
 
         if isSuccess is False:

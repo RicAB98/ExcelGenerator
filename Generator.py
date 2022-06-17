@@ -130,6 +130,7 @@ class Generator:
         #Merge cells
         if section.subSections == 1:
             worksheet.write(self.currentRow, self.currentColumn, section.name, cellFormat)
+            worksheet.write(self.currentRow + 1, self.currentColumn, ' ', cellFormat)
         else:
             worksheet.merge_range(self.currentRow, self.currentColumn, self.currentRow, self.currentColumn + section.subSections - 1, section.name, cellFormat) #Section cell
             worksheet.merge_range(self.currentRow + 1, self.currentColumn, self.currentRow + 1, self.currentColumn + section.subSections - 1,'', cellFormat) #SubSections cell
