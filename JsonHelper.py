@@ -42,21 +42,27 @@ class JsonHelper:
         sections = []
 
         for s in data["sections"]:
-            sections.append(Section(
-                s["name"],
-                s["subSections"],
-                s["percentage"],
-                JsonHelper.GetColorToArray(s["backgroundColor"]),
-                JsonHelper.GetColorToArray(s["textColor"])
-            ))
+            try:
+                sections.append(Section(
+                    s["name"],
+                    s["subSections"],
+                    s["percentage"],
+                    JsonHelper.GetColorToArray(s["backgroundColor"]),
+                    JsonHelper.GetColorToArray(s["textColor"])
+                ))
+            except Exception as e:
+                return (False, s["name"] + ":  \n" + str(e))
 
         dictionary["sections"] = sections
 
-        dictionary["finalSection"] = FinalSection(
-            JsonHelper.GetColorToArray(data["finalSection"]["backgroundColor"]),
-            JsonHelper.GetColorToArray(data["finalSection"]["textColor"])),
+        try:
+            dictionary["finalSection"] = FinalSection(
+                JsonHelper.GetColorToArray(data["finalSection"]["backgroundColor"]),
+                JsonHelper.GetColorToArray(data["finalSection"]["textColor"])),
+        except Exception as e:
+            return (False, "Avaliação:  \n" + str(e))
 
-        return dictionary
+        return (True, dictionary)
 
     def GetColorToJson(color):
         return{
@@ -66,4 +72,6 @@ class JsonHelper:
         }
 
     def GetColorToArray(color):
+        if color["red"] < 0 or color["red"] > 255 or color["green"] < 0 or color["green"] > 255 or color["blue"] < 0 or color["blue"] > 255:
+            raise Exception("Cores têm que ter valores entre 0 e 255")
         return [color["red"], color["green"], color["blue"]]

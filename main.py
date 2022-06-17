@@ -36,16 +36,24 @@ class UI(QMainWindow):
     def UploadFile(self):
         fname = QFileDialog.getOpenFileName(self, 'Abrir ficheiro', './',"Ficheiro json (*.json)")
 
-        dictionary = JsonHelper.ParseJson(fname[0])
+        try:
+            isSuccess, result = JsonHelper.ParseJson(fname[0])
+        except:
+            self.infoLabel.setText("Erro encontrado no ficheiro JSON")
+            return
 
-        self.ficheiroTextBox.setText(dictionary["fileName"])
-        self.alunosSpinBox.setValue(dictionary["numberStudents"])
-        self.periodosSpinBox.setValue(dictionary["numberPeriods"])
+        if isSuccess is False:
+            self.infoLabel.setText(result)
+            return
 
-        self.sections = dictionary["sections"]
+        self.ficheiroTextBox.setText(result["fileName"])
+        self.alunosSpinBox.setValue(result["numberStudents"])
+        self.periodosSpinBox.setValue(result["numberPeriods"])
+
+        self.sections = result["sections"]
         self.RefreshComboBox()
 
-        self.finalSection = dictionary["finalSection"][0]
+        self.finalSection = result["finalSection"][0]
         self.UpdateColorFrames(self.cabecalhoAvaliacaoFrame, self.textoAvaliacaoFrame, self.finalSection)
 
     def UpdateColorFrames(self, backgroundFrame, textFrame, section):

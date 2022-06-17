@@ -128,8 +128,11 @@ class Generator:
         noBorderFormat.set_locked(False)
 
         #Merge cells
-        worksheet.merge_range(self.currentRow, self.currentColumn, self.currentRow, self.currentColumn + section.subSections - 1, section.name, cellFormat) #Section cell
-        worksheet.merge_range(self.currentRow + 1, self.currentColumn, self.currentRow + 1, self.currentColumn + section.subSections - 1,'', cellFormat) #SubSections cell
+        if section.subSections == 1:
+            worksheet.write(self.currentRow, self.currentColumn, section.name, cellFormat)
+        else:
+            worksheet.merge_range(self.currentRow, self.currentColumn, self.currentRow, self.currentColumn + section.subSections - 1, section.name, cellFormat) #Section cell
+            worksheet.merge_range(self.currentRow + 1, self.currentColumn, self.currentRow + 1, self.currentColumn + section.subSections - 1,'', cellFormat) #SubSections cell
 
         for n in range(0, section.subSections):
             for m in range(0, self.numberStudents - 1):
